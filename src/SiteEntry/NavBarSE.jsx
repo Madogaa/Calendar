@@ -57,11 +57,11 @@ function NavBarSE() {
         </NavbarContent>
 
         <NavbarContent justify="end">
-          <NavbarItem className="hidden lg:flex">
-            <Link href="#">Login</Link>
+          <NavbarItem className="flex">
+            <Link href="/login">Login</Link>
           </NavbarItem>
           <NavbarItem>
-            <Button as={Link} className='text-slate-900' href="#" variant="flat">
+            <Button as={Link} className='text-slate-900' href="/signup" variant="flat">
               Sign Up
             </Button>
           </NavbarItem>

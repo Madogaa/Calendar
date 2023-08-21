@@ -10,7 +10,7 @@ const RouterView = ({ routes }) => {
           key={index}
           path={route.path}
           exact={route.exact}
-          element={<route.component />}
+          element={route.component}
         />
       ))}
     </Routes>
@@ -22,7 +22,7 @@ RouterView.propTypes = {
     PropTypes.shape({
       path: PropTypes.string.isRequired,
       exact: PropTypes.bool,
-      component: PropTypes.elementType.isRequired,
+      component: PropTypes.element.isRequired,
     })
   ).isRequired,
 };

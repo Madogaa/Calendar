@@ -18,7 +18,7 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-  background-image: url('/public/background-1.jpg');
+  background-image: url('/background-1.jpg');
   background-size: cover ;
 }
 
