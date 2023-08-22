@@ -5,9 +5,9 @@ import { AppProvider } from './Context/AppContext';
 import SiteEntry from './SiteEntry/SiteEntry'
 import Login from './SiteEntry/Login';
 import SignUp from './SiteEntry/SignUp';
+import Main from './Activity/Main';
 
 import './App.css'
-import EventsTest from './Events/EventsTest';
 
 function App() {
 
@@ -29,7 +29,7 @@ function App() {
     },
     {
       path: '/main',
-      component: <EventsTest />,
+      component: <Main />,
       exact: true,
     },
   ];

@@ -12,13 +12,15 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  --main-bg-color-transparent: rgba(255,255,255,0.1);
+  --main-white-text: rgba(255,255,255,0.7);
 }
 
 body {
   margin: 0;
   display: flex;
   place-items: center;
-  background-image: url('/background-1.jpg');
+  background: #171321;
   background-size: cover ;
 }
 
