@@ -3,6 +3,7 @@ import IconNav from "./IconNav";
 import Calendar from "./Calendar";
 
 import "./Main.css";
+import EventsDetail from "./EventsDetail";
 
 
 function Main() {
@@ -10,6 +11,7 @@ function Main() {
     <div className="flex w-screen h-screen">
         <IconNav />
         <Calendar />
+        <EventsDetail />
     </div>
   );
 }

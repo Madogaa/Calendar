@@ -8,6 +8,8 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .calendar {
@@ -21,7 +23,6 @@
     box-shadow: 0 0 1rem var(--main-bg-color-transparent);
     background-color: var(--main-bg-color-transparent);
     overflow: hidden;
-    margin: auto;
 }
 
 .grid {
@@ -56,20 +57,33 @@
     border: none !important;
   }
 
-  .react-datepicker__input-container {
+  .react-datepicker__month-text:hover {
+    background-color: rgb(59 130 246) !important;
+  }
 
+  .react-datepicker__month-text--selected {
+    color: white !important;
+    font-weight: 700;
+    background-color: rgb(29 78 216) !important;
+  }
+
+  .react-datepicker__month-text--today{
+    color: rgba(252 ,211 ,77,1) !important;
   }
 
   .react-datepicker__input-container input{
     padding: 0.3rem;
-    background-color: var(--main-bg-color-transparent);
+    background-color: transparent;
     color: var(--main-white-text) ;
-    border-radius: 0.5rem;
-    border: 0.15rem solid var(--main-bg-color-transparent) ;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 1rem;
+    outline: none;
+    text-align: center;
   }
 
   .react-datepicker-popper {
-    inset: 0 auto auto 2rem !important;
+    inset: -10.5rem auto auto 13rem !important;
   }
 
   .react-datepicker__triangle {

@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useApp } from "../Context/AppContext";
 import axios from "axios";
 
 function Login() {
   const navigate = useNavigate();
-  const { isLoggedIn, login } = useApp();
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
 
@@ -25,7 +23,6 @@ function Login() {
         password,
       });
       localStorage.setItem("token", response.data.token);
-      login();
       navigate("/main");
     } catch (error) {
       console.error(error); // Handle the error
@@ -33,17 +30,8 @@ function Login() {
   };
 
 
-  const log = () => {
-    login()
-  }
-
-  const consulta = () => {
-    console.log(isLoggedIn)
-  }
-
-
   return (
-    <>
+
     <form
       onSubmit={(event) => handleRegister(event)}
       className="m-auto flex flex-col gap-4"
@@ -55,9 +43,6 @@ function Login() {
       </button>
 
     </form>
-          <button onClick={log}>log</button>
-          <button onClick={consulta}>consulta</button>
-          </>
   );
 }
 

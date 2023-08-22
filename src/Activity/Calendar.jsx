@@ -3,11 +3,12 @@ import DatePicker from "react-datepicker";
 
 import "./Main.css";
 import "react-datepicker/dist/react-datepicker.css";
+import { useApp } from "../Context/AppContext";
 
 const Calendar = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const year = selectedDate.getFullYear();
-  const month = selectedDate.getMonth();
+  const {selectedDate} = useApp()
+  const year = selectedDate.year();
+  const month = selectedDate.month();
 
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
@@ -20,13 +21,13 @@ const Calendar = () => {
 
   return (
     <div className="content">
-        <DatePicker
+        {/* <DatePicker
         selected={selectedDate}
         onChange={(date) => setSelectedDate(date)}
         dateFormat="MMMM yyyy"
         showMonthYearPicker
         className="custom-datepicker"
-      />
+      /> */}
         <div className="calendar">
 
           <div className="flex">

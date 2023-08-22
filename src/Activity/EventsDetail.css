@@ -1,0 +1,16 @@
+.eventsdetail{
+    width: 30rem;
+    border-left: 0.1rem solid var(--main-bg-color-transparent);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.MuiPickersLayout-actionBar .MuiButton-root {
+  display: none;
+}
+
+.datepicker{
+    height: fit-content;
+    background-color: rgba(255, 255, 255, ) !important;
+}

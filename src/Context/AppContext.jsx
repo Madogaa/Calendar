@@ -1,22 +1,16 @@
 import React, { createContext, useContext, useState } from 'react';
-
+import dayjs from 'dayjs'
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(dayjs(new Date()));
 
-  const login = () => {
-    // Lógica para iniciar sesión
-    setIsLoggedIn(true);
-  };
-
-  const logout = () => {
-    // Lógica para cerrar sesión
-    setIsLoggedIn(false);
+  const onChangeDate = (newDate) => {
+    setSelectedDate(newDate);
   };
 
   return (
-    <AppContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AppContext.Provider value={{ selectedDate, onChangeDate }}>
       {children}
     </AppContext.Provider>
   );
