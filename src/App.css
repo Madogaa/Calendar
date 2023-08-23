@@ -13,7 +13,20 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
   --main-bg-color-transparent: rgba(255,255,255,0.1);
-  --main-white-text: rgba(255,255,255,0.7);
+  --main-white-text: rgba(255,255,255,0.9);
+  --secondary-color: rgb(255, 200, 100);
+}
+
+.text-white-t{
+  color: var(--main-white-text);
+}
+.text-second{
+  color:var(--secondary-color)
+}
+
+.bg-second{
+  --tw-bg-opacity: 1;
+  background-color: var(--secondary-color)!important ;
 }
 
 body {

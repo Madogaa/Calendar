@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import DatePicker from "react-datepicker";
-
-import "./Main.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { useApp } from "../Context/AppContext";
+import {useDisclosure} from "@nextui-org/react";
+import "./Calendar.css";
+import EventModal from "../Modal/EventModal";
 
 const Calendar = () => {
-  const {selectedDate} = useApp()
+  const {onOpen,isOpen, onOpenChange} = useDisclosure();
+  const [day,setDay] = useState(0);
+  const [monthh,setMonthh] = useState(0);
+
+  const { selectedDate } = useApp();
   const year = selectedDate.year();
   const month = selectedDate.month();
 
@@ -19,57 +23,69 @@ const Calendar = () => {
     daysInMonth.push(day);
   }
 
+  const handleDayClick = (dayNumber) => {
+    if (dayNumber) {
+      setDay(dayNumber)
+      const month = selectedDate.month() + 1;
+      setMonthh(month);
+      console.log(`Clicked on day ${dayNumber} / ${month}`);
+      onOpen();
+    }
+  };
+
   return (
     <div className="content">
-        {/* <DatePicker
-        selected={selectedDate}
-        onChange={(date) => setSelectedDate(date)}
-        dateFormat="MMMM yyyy"
-        showMonthYearPicker
-        className="custom-datepicker"
-      /> */}
-        <div className="calendar">
+      <div className="calendar">
+        <div className="flex">
+          {[
+            "Domingo",
+            "Lunes",
+            "Martes",
+            "Miércoles",
+            "Jueves",
+            "Viernes",
+            "Sábado",
+          ].map((day) => (
+            <div key={day} className="weekday">
+              {day}
+            </div>
+          ))}
+        </div>
+        <div className="grid">
+          {Array(Math.ceil((daysInMonth.length + startingDayOfWeek) / 7))
+            .fill()
+            .map((_, weekIndex) => (
+              <React.Fragment key={weekIndex}>
+                {Array(7)
+                  .fill()
+                  .map((_, dayIndex) => {
+                    const dayNumber =
+                      weekIndex * 7 + dayIndex + 1 - startingDayOfWeek;
 
-          <div className="flex">
-            {[
-              "Domingo",
-              "Lunes",
-              "Martes",
-              "Miércoles",
-              "Jueves",
-              "Viernes",
-              "Sábado",
-            ].map((day) => (
-              <div key={day} className="weekday">
-                {day}
-              </div>
+                    return (
+                      <div
+                        onClick={() =>
+                          handleDayClick(
+                            dayNumber > 0 && dayNumber <= lastDay.getDate()
+                              ? dayNumber
+                              : null
+                          )
+                        }
+                        key={dayIndex}
+                        className="day"
+                      >
+                        {dayNumber > 0 && dayNumber <= lastDay.getDate()
+                          ? dayNumber
+                          : ""}
+                      </div>
+                    );
+                  })}
+              </React.Fragment>
             ))}
-          </div>
-          <div className="grid">
-            {Array(Math.ceil((daysInMonth.length + startingDayOfWeek) / 7))
-              .fill()
-              .map((_, weekIndex) => (
-                <React.Fragment key={weekIndex}>
-                  {Array(7)
-                    .fill()
-                    .map((_, dayIndex) => {
-                      const dayNumber =
-                        weekIndex * 7 + dayIndex + 1 - startingDayOfWeek;
-
-                      return (
-                        <div key={dayIndex} className="day">
-                          {dayNumber > 0 && dayNumber <= lastDay.getDate()
-                            ? dayNumber
-                            : ""}
-                        </div>
-                      );
-                    })}
-                </React.Fragment>
-              ))}
-          </div>
         </div>
       </div>
-
+      <EventModal isOpen={isOpen} onOpenChange={onOpenChange} day={day} month={monthh} />
+    </div>
   );
 };
 
