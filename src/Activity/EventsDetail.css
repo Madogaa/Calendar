@@ -1,16 +1,43 @@
+/* EVENTS DETAIL */
 .eventsdetail{
     width: 30rem;
-    border-left: 0.1rem solid var(--main-bg-color-transparent);
+    border-left: 0.15rem solid var(--main-bg-color-transparent);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-}
-
-.MuiPickersLayout-actionBar .MuiButton-root {
-  display: none;
+    background-color: var(--main-bg-color-transparent);
+    box-shadow : 5px 5px 40px rgba(255, 255, 255, 0.3) ;
 }
 
 .datepicker{
     height: fit-content;
-    background-color: rgba(255, 255, 255, ) !important;
+    background-color: transparent !important;
+}
+
+/* DatePicker Input Month Year, Date Indicator */
+.MuiPickersCalendarHeader-label{
+  color: white !important;
+}
+
+/* Each day pointer container. Ej: L,M,X,J,V,S,D */
+.MuiTypography-root{
+  color: white !important;
+}
+
+/* Each day container and left and rifth arrows */
+.MuiButtonBase-root {
+color: white !important;
+}
+
+.MuiButtonBase-root:hover {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  }
+
+/* Default modal Inputs "OK" & "CANCEL" */
+.MuiPickersLayout-actionBar .MuiButton-root {
+  display: none;
+}
+
+.MuiPickersDay-today{
+  border: 0.15rem solid white !important;
 }

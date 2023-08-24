@@ -15,7 +15,8 @@ import { useApp } from "../Context/AppContext";
 
 function NavBarSE() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const { isLoged, logout } = useApp();
+  const [isLoggedIn, setIsLoggedIn] = React.useState(useApp().isLogged());
+  const { logout } = useApp();
   const menuItems = [
     "Profile",
     "Dashboard",
@@ -28,6 +29,11 @@ function NavBarSE() {
     "Help & Feedback",
     "Log Out",
   ];
+
+  const handleLogout = () => {
+    logout();
+    setIsLoggedIn(false);
+  };
 
   return (
     <Navbar
@@ -52,6 +58,7 @@ function NavBarSE() {
         className="navbarcontent hidden sm:flex gap-4"
         justify="center"
       >
+        <img className="h-8" src="/logo.png" alt="Logo" />
         <NavbarBrand>
           <p className="font-bold text-inherit">DAILY</p>
         </NavbarBrand>
@@ -68,23 +75,23 @@ function NavBarSE() {
         </NavbarItem>
       </NavbarContent>
 
-      {isLoged() ? (
+      {isLoggedIn ? (
             <button
-              className="justify-end"
+              onClick={()=>handleLogout()}
+              className="px-2 py-1 justify-end bg-second-t border-second text-white-t font-semibold"
             >
               Log Out
             </button>
       ) : (
         <NavbarContent justify="end">
-          <NavbarItem className="flex">
-            <Link href="/login">Login</Link>
+          <NavbarItem className="flex ">
+            <Link className="text-second" href="/login">Login</Link>
           </NavbarItem>
           <NavbarItem>
             <Button
               as={Link}
-              className="text-slate-900"
+              className="bg-second-t text-white-t font-semibold border-second"
               href="/signup"
-              variant="flat"
             >
               Sign Up
             </Button>

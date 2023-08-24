@@ -9,7 +9,7 @@ export const AppProvider = ({ children }) => {
     setSelectedDate(newDate);
   };
 
-  const isLoged = () => {
+  const isLogged = () => {
     return sessionStorage.getItem("isAuthenticated")
   };
 
@@ -23,7 +23,7 @@ export const AppProvider = ({ children }) => {
   };
 
   return (
-    <AppContext.Provider value={{ selectedDate, onChangeDate, isLoged, login, logout }}>
+    <AppContext.Provider value={{ selectedDate, onChangeDate, isLogged, login, logout }}>
       {children}
     </AppContext.Provider>
   );

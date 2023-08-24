@@ -52,6 +52,7 @@ const Calendar = () => {
           ))}
         </div>
         <div className="grid">
+        <div className="bg-blur" />
           {Array(Math.ceil((daysInMonth.length + startingDayOfWeek) / 7))
             .fill()
             .map((_, weekIndex) => (

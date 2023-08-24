@@ -10,6 +10,7 @@ import axios from "axios";
 
 function Main() {
   const navigate = useNavigate();
+
   const authenticate = async () => {
     const token = localStorage.getItem('token');
     try{
@@ -26,9 +27,12 @@ function Main() {
       console.log(error)
     }
   }
+
   useEffect(()=>{
+
     authenticate()
   },[])
+
   return (
     <div className="flex w-screen h-screen">
         <IconNav />
