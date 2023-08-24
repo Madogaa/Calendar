@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useState } from 'react';
 import dayjs from 'dayjs'
+import 'dayjs/locale/es'
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
+  dayjs.locale("es");
   const [selectedDate, setSelectedDate] = useState(dayjs(new Date()));
 
   const onChangeDate = (newDate) => {

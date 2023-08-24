@@ -1,6 +1,7 @@
 import React from "react";
 import {HiSquares2X2} from 'react-icons/hi2'
 import {IoCalendarOutline,IoSettingsOutline} from 'react-icons/io5'
+import {IoIosArrowRoundForward} from 'react-icons/io'
 
 function IconNav() {
 
@@ -22,6 +23,11 @@ function IconNav() {
   return (
     <div className="activitypanel h-screen">
       <div className="panel-icons py-10 flex flex-col gap-10 justify-center items-center">
+      <IoIosArrowRoundForward
+          className="border-2 border-white rounded-full cursor-pointer"
+          color="white"
+          size={32}
+        />
         <a href="#">
           <img
             className="w-8 rounded-full"
