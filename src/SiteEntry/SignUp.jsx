@@ -18,7 +18,7 @@ function SignUp() {
   const handleRegister = async (event) => {
     try {
       event.preventDefault()
-      const response = await axios.post('http://localhost:3000/auth/register', {
+      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/auth/register`, {
         username,
         password,
       });

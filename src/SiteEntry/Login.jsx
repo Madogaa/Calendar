@@ -20,7 +20,7 @@ function Login() {
   const handleRegister = async (event) => {
     try {
       event.preventDefault();
-      const response = await axios.post("http://localhost:3000/auth/login", {
+      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/auth/login`, {
         username,
         password,
       });

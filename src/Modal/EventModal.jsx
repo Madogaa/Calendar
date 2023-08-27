@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
 import {
   Modal,
   ModalContent,
@@ -9,18 +10,24 @@ import {
 } from "@nextui-org/react";
 import axios from "axios";
 
-function EventModal({ isOpen, onOpenChange, day, month }) {
+function EventModal({ isOpen, onOpenChange, date }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(date.format("YYYY-MM-DDTHH:mm"));
+  const [endDate, setEndDate] = useState(date.format("YYYY-MM-DDTHH:mm"));
+
+
+  useEffect(()=>{
+    setStartDate(date.format("YYYY-MM-DDTHH:mm"))
+    setEndDate(date.format("YYYY-MM-DDTHH:mm"))
+  },[date])
 
   const handleCreateEvent = async (onClose) => {
     const token = localStorage.getItem("token"); // Obtener el token almacenado en el local storage
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/events/create",
+        `${import.meta.env.VITE_REACT_APP_API_URL}/events/create`,
         {
           title,
           description,

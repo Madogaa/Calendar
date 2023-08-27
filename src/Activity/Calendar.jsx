@@ -11,8 +11,6 @@ import axios from "axios";
 const Calendar = () => {
 
   const { onOpen, isOpen, onOpenChange } = useDisclosure();
-  const [day, setDay] = useState(0);
-  const [month, setMonthh] = useState(0);
   const {monthEvents, handleMonthEvents} = useApp();
   const { selectedDate, onChangeDate } = useApp();
   const firstDay = new Date(selectedDate.year(), selectedDate.month(), 1);
@@ -49,7 +47,7 @@ const Calendar = () => {
     console.log(date.month());
     try {
       const response = await axios.get(
-        `http://localhost:3000/events/list/month?month=${date.month()+1}&year=${date.year()}`,
+        `${import.meta.env.VITE_REACT_APP_API_URL}/events/list/month?month=${date.month()+1}&year=${date.year()}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -187,8 +185,7 @@ const Calendar = () => {
       <EventModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        day={day}
-        month={month}
+        date = {selectedDate}
       />
     </div>
   );

@@ -14,7 +14,7 @@ function Main() {
   const authenticate = async () => {
     const token = localStorage.getItem('token');
     try{
-    const response = await axios.get("http://localhost:3000/auth/authenticate",
+    const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/auth/authenticate`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
