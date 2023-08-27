@@ -6,6 +6,11 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   dayjs.locale("es");
   const [selectedDate, setSelectedDate] = useState(dayjs(new Date()));
+  const [monthEvents, setMonthEvents] = useState([]);
+
+  const handleMonthEvents = (monthEvents) => {
+      setMonthEvents(monthEvents);
+  }
 
   const onChangeDate = (newDate) => {
     setSelectedDate(newDate);
@@ -25,7 +30,7 @@ export const AppProvider = ({ children }) => {
   };
 
   return (
-    <AppContext.Provider value={{ selectedDate, onChangeDate, isLogged, login, logout }}>
+    <AppContext.Provider value={{ selectedDate, onChangeDate, isLogged, login, logout, monthEvents, handleMonthEvents }}>
       {children}
     </AppContext.Provider>
   );

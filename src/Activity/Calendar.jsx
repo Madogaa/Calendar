@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { useApp } from "../Context/AppContext";
 import { useDisclosure } from "@nextui-org/react";
@@ -6,18 +6,18 @@ import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import "./Calendar.css";
 import dayjs from "dayjs";
 import EventModal from "../Modal/EventModal";
+import axios from "axios";
 
 const Calendar = () => {
+
   const { onOpen, isOpen, onOpenChange } = useDisclosure();
   const [day, setDay] = useState(0);
   const [month, setMonthh] = useState(0);
-
+  const {monthEvents, handleMonthEvents} = useApp();
   const { selectedDate, onChangeDate } = useApp();
-
   const firstDay = new Date(selectedDate.year(), selectedDate.month(), 1);
   const lastDay = new Date(selectedDate.year(), selectedDate.month() + 1, 0);
   const startingDayOfWeek = firstDay.getDay();
-
   const daysInMonth = [];
   for (let day = 1; day <= lastDay.getDate(); day++) {
     daysInMonth.push(day);
@@ -33,12 +33,62 @@ const Calendar = () => {
     "Domingo",
   ];
 
+
+  useEffect(() => {
+    fetchEventsByDate(selectedDate)
+      .then((events) => {
+        handleMonthEvents(events);
+      })
+      .catch((error) => {
+        console.error('Error fetching events:', error);
+      });
+  }, [selectedDate]);
+
+  const fetchEventsByDate = async (date) => {
+    const token = localStorage.getItem('token'); // Obtener el token almacenado
+    console.log(date.month());
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/events/list/month?month=${date.month()+1}&year=${date.year()}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const events = response.data;
+      // Aquí puedes manejar los eventos devueltos por la API
+      return events
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  };
+
+  const getDayEvents = (dayNumber) => {
+    const date = new Date(selectedDate.year(), selectedDate.month(), dayNumber);
+    const filteredEvents = monthEvents.filter((event) =>
+      date > new Date(event.startDate) && date < new Date(event.endDate)
+    );
+
+    return (
+      <div className="w-full h-full overflow-hidden pt-2">
+        {
+        filteredEvents.map((event,index) => (
+        <p className="w-full py-0.5 px-1 text-sm text-white-t font-semibold bg-second rounded-lg mb-1 whitespace-nowrap "  key={index}>{event.title}</p>
+        ))
+      }
+      </div>
+      )
+  };
+
   const handleDayClick = (dayNumber) => {
     if (dayNumber) {
+      const newDate = dayjs(new Date(selectedDate.year(),selectedDate.month(),dayNumber))
+      onChangeDate(newDate)
       setDay(dayNumber);
-      const month = selectedDate.month() + 1;
-      setMonthh(month);
-      console.log(`Clicked on day ${dayNumber} / ${month}`);
+      setMonthh(selectedDate.month() + 1);
+
       onOpen();
     }
   };
@@ -87,7 +137,7 @@ const Calendar = () => {
         <div className="flex">
           {days.map((day) => (
             <div key={day} className="weekday">
-              {day.tit}
+              {day}
             </div>
           ))}
         </div>
@@ -104,6 +154,7 @@ const Calendar = () => {
                       weekIndex * 7 + dayIndex + 1 - startingDayOfWeek;
 
                     return (
+                      <>
                       <div
                         onClick={() =>
                           handleDayClick(
@@ -113,17 +164,25 @@ const Calendar = () => {
                           )
                         }
                         key={dayIndex}
-                        className="day"
+                        className={`day ${dayNumber === selectedDate.date() ? 'selectedDate' : ''}`}
                       >
                         {dayNumber > 0 && dayNumber <= lastDay.getDate()
-                          ? dayNumber
+                          ? (
+                            <>
+                            <p className="h-6">{dayNumber}</p>
+                            {getDayEvents(dayNumber)}
+                            </>
+                          )
                           : ""}
+
                       </div>
+                      </>
                     );
                   })}
               </React.Fragment>
             ))}
         </div>
+
       </div>
       <EventModal
         isOpen={isOpen}

@@ -6,13 +6,11 @@ import { useApp } from "../Context/AppContext";
 
 import "./EventsDetail.css";
 import Divider from "../Styling/Divider";
+import DayEvents from "./DayEvents";
 
 function EventsDetail() {
   const {selectedDate, onChangeDate} = useApp()
-
-  useEffect(()=>{
-    console.log(selectedDate)
-  },[selectedDate])
+  const {monthEvents} = useApp()
 
   const handleDateChange = (newDate) => {
     onChangeDate(newDate);
@@ -33,6 +31,7 @@ function EventsDetail() {
         />
       </LocalizationProvider>
       <Divider />
+      <DayEvents events={monthEvents}/>
       </div>
     </div>
   );

@@ -24,7 +24,7 @@
     flex-grow: 1;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-auto-rows: 1fr;
+    grid-auto-rows: minmax(0, 20%); /* Altura máxima fija de 100px */
     position: relative;
 
 }
@@ -41,9 +41,25 @@
 .day {
     padding: 10px;
     border: 0.1rem solid var(--main-bg-color-transparent);
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.eventday{
+    padding: 40px 10px 10px 10px ;
 }
 
 .day:not(:empty):hover {
     background-color: var(--main-bg-color-transparent);
     cursor: pointer;
+  }
+
+  .selectedDate {
+    background-color: rgba(250, 200, 100, 0.2);
+    border:0.15rem solid rgba(250, 200, 100, 0.6) ;
+  }
+
+  .text-overflow-ellipsis{
+text-overflow: ellipsis;
   }
