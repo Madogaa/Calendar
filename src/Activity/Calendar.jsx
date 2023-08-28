@@ -43,8 +43,7 @@ const Calendar = () => {
   }, [selectedDate]);
 
   const fetchEventsByDate = async (date) => {
-    const token = localStorage.getItem('token'); // Obtener el token almacenado
-    console.log(date.month());
+    const token = localStorage.getItem('token');
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_REACT_APP_API_URL}/events/list/month?month=${date.month()+1}&year=${date.year()}`,
@@ -64,16 +63,16 @@ const Calendar = () => {
   };
 
   const getDayEvents = (dayNumber) => {
-    const date = new Date(selectedDate.year(), selectedDate.month(), dayNumber);
+    const date = dayjs(new Date(selectedDate.year(), selectedDate.month(), dayNumber)).format("YYYY-MM-DD");
     const filteredEvents = monthEvents.filter((event) =>
-      date > new Date(event.startDate) && date < new Date(event.endDate)
+      date >= event.startDate && date <= event.endDate
     );
 
     return (
       <div className="w-full h-full overflow-hidden pt-2">
         {
         filteredEvents.map((event,index) => (
-        <p className="w-full py-0.5 px-1 text-sm text-white-t font-semibold bg-second rounded-lg mb-1 whitespace-nowrap "  key={index}>{event.title}</p>
+        <p className="w-full py-0.5 px-1 text-sm text-white-t font-semibold bg-second rounded-lg mb-1 overflow-hidden text-ellipsis whitespace-nowrap "  key={index}>{event.title}</p>
         ))
       }
       </div>
@@ -84,9 +83,6 @@ const Calendar = () => {
     if (dayNumber) {
       const newDate = dayjs(new Date(selectedDate.year(),selectedDate.month(),dayNumber))
       onChangeDate(newDate)
-      setDay(dayNumber);
-      setMonthh(selectedDate.month() + 1);
-
       onOpen();
     }
   };

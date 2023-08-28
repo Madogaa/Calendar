@@ -10,7 +10,7 @@ import DayEvents from "./DayEvents";
 
 function EventsDetail() {
   const {selectedDate, onChangeDate} = useApp()
-  const {monthEvents} = useApp()
+
 
   const handleDateChange = (newDate) => {
     onChangeDate(newDate);
@@ -31,7 +31,7 @@ function EventsDetail() {
         />
       </LocalizationProvider>
       <Divider />
-      <DayEvents events={monthEvents}/>
+      <DayEvents/>
       </div>
     </div>
   );

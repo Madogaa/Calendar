@@ -10,15 +10,11 @@
 }
 
 .dayevent{
-  display: flex;
   background-color: rgba(255, 255, 255, 0.2);
   color: var(--main-white-text);
-  padding: 1rem 0;
-
+  padding: 1rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  justify-content: center;
-  align-items: center;
   border-radius: 2rem;
 }
 
