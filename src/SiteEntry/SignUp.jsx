@@ -1,18 +1,21 @@
 import React, { useState } from 'react'
+import { useNavigate } from "react-router-dom";
+import { useApp } from '../Context/AppContext';
 import axios from 'axios'
 
 function SignUp() {
+  const navigate = useNavigate();
   const [username,setUsername] = useState(null)
   const [password,setPassword] = useState(null)
+  const [button, setButton] = useState(false);
+  const { login, handleErr, handleMsg,handleTrigger } = useApp();
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value)
-    console.log(username)
   }
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value)
-    console.log(password)
   }
 
   const handleRegister = async (event) => {
@@ -21,11 +24,19 @@ function SignUp() {
       const response = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/auth/register`, {
         username,
         password,
-      });
-      console.log(response.data); // Log the response from the server
+      }); // Log the response from the server
+      localStorage.setItem("token", response.data.token);
+      login()
+      navigate("/main");
     } catch (error) {
-      console.error(error); // Handle the error
-    }
+      handleTrigger();
+      handleMsg(`${error.response.data.error}`)
+      handleErr(true);
+      setButton(true);
+      setTimeout(() => {
+        setButton(false);
+      }, 2000);
+    } // Handle the error
   }
   return (
   <>
@@ -92,6 +103,7 @@ function SignUp() {
               <button
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-second px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                disabled={button}
               >
                 Sign up
               </button>

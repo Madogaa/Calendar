@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { useApp } from "../Context/AppContext";
-import { useDisclosure } from "@nextui-org/react";
+
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import "./Calendar.css";
 import dayjs from "dayjs";
@@ -10,8 +10,8 @@ import axios from "axios";
 
 const Calendar = () => {
 
-  const { onOpen, isOpen, onOpenChange } = useDisclosure();
   const {monthEvents, handleMonthEvents} = useApp();
+  const {onOpen,isOpen,onOpenChange} = useApp();
   const { selectedDate, onChangeDate } = useApp();
   const firstDay = new Date(selectedDate.year(), selectedDate.month(), 1);
   const lastDay = new Date(selectedDate.year(), selectedDate.month() + 1, 0);
@@ -148,7 +148,7 @@ const Calendar = () => {
                       weekIndex * 7 + dayIndex + 1 - startingDayOfWeek;
 
                     return (
-                      <>
+
                       <div
                         onClick={() =>
                           handleDayClick(
@@ -170,7 +170,7 @@ const Calendar = () => {
                           : ""}
 
                       </div>
-                      </>
+
                     );
                   })}
               </React.Fragment>

@@ -7,7 +7,8 @@ function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
-  const { login } = useApp();
+  const [button, setButton] = useState(false);
+  const { login, handleErr, handleMsg,handleTrigger } = useApp();
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -28,7 +29,13 @@ function Login() {
       login();
       navigate("/main");
     } catch (error) {
-      console.error(error); // Handle the error
+      handleTrigger();
+      handleMsg(`${error.response.data.error}`)
+      handleErr(true);
+      setButton(true);
+      setTimeout(() => {
+        setButton(false);
+      }, 2000);
     }
   };
 
@@ -105,6 +112,7 @@ function Login() {
               <button
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-second px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                disabled={button}
               >
                 Sign in
               </button>

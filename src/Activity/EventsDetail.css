@@ -12,7 +12,6 @@
 .dayevent{
   background-color: rgba(255, 255, 255, 0.2);
   color: var(--main-white-text);
-  padding: 1rem;
   font-weight: 600;
   margin-bottom: 1rem;
   border-radius: 2rem;

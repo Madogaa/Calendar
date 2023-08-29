@@ -6,10 +6,12 @@ import "./Main.css";
 import EventsDetail from "./EventsDetail";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useApp } from "../Context/AppContext";
 
 
 function Main() {
   const navigate = useNavigate();
+  const { logout} = useApp();
 
   const authenticate = async () => {
     const token = localStorage.getItem('token');
@@ -21,10 +23,9 @@ function Main() {
           },
         }
     )
-    console.log(response.data)
     }catch(error){
-      navigate('/login')
-      console.log(error)
+      logout();
+      navigate('/login');
     }
   }
 

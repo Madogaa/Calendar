@@ -1,0 +1,18 @@
+/* Update your existing CSS or add these classes to your stylesheet */
+
+/* Initial state */
+.err {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out; /* Add transition property */
+  }
+
+  /* Visible state */
+  .err.opacity-100 {
+    opacity: 1;
+  }
+
+  /* Hidden state (optional, pointer-events-none prevents clicks) */
+  .err.opacity-0 {
+    opacity: 0;
+    pointer-events: none;
+  }

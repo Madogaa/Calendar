@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import RouterView from './RouterView/RouterView';
 import { AppProvider } from './Context/AppContext';
@@ -8,6 +8,7 @@ import SignUp from './SiteEntry/SignUp';
 import Main from './Activity/Main';
 
 import './App.css'
+import ErrorMessage from './ErrorLog/ErrorMessage';
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
     <>
     <Router>
       <AppProvider>
+        <ErrorMessage />
         <RouterView routes={routes} />
       </AppProvider>
     </Router>

@@ -12,12 +12,18 @@ import {
 import axios from "axios";
 import dayjs from "dayjs";
 
-function EventModal({ isOpen, onOpenChange, date, titulo = "", descripcion = "", eventId = null }) {
-  const [title, setTitle] = useState(titulo);
-  const [description, setDescription] = useState(descripcion);
+function EventModal({ isOpen, onOpenChange, date}) {
+  const {monthEvents, handleMonthEvents,eventData,handleEventData} = useApp()
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState(date.format("YYYY-MM-DDTHH:mm"));
   const [endDate, setEndDate] = useState(date.format("YYYY-MM-DDTHH:mm"));
-  const {monthEvents, handleMonthEvents} = useApp()
+
+
+  useEffect(()=>{
+    setTitle(eventData?.title)
+    setDescription(eventData?.description)
+  },[eventData])
 
   useEffect(()=>{
     setStartDate(date.format("YYYY-MM-DD"))
@@ -94,7 +100,10 @@ function EventModal({ isOpen, onOpenChange, date, titulo = "", descripcion = "",
                 />
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
+                <Button onClick={()=>{
+                  setTitle("")
+                  setDescription("")
+                }} color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
                 <Button
