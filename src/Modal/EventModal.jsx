@@ -16,13 +16,18 @@ function EventModal({ isOpen, onOpenChange, date}) {
   const {monthEvents, handleMonthEvents,eventData,handleEventData} = useApp()
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [startDate, setStartDate] = useState(date.format("YYYY-MM-DDTHH:mm"));
-  const [endDate, setEndDate] = useState(date.format("YYYY-MM-DDTHH:mm"));
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [eventId, setEventId] = useState(-1);
+  const { handleErr, handleMsg,handleTrigger } = useApp();
 
 
   useEffect(()=>{
-    setTitle(eventData?.title)
-    setDescription(eventData?.description)
+    setTitle(eventData?.title || "");
+    setDescription(eventData?.description || "");
+    setStartDate(eventData?.startDate || "");
+    setEndDate(eventData?.endDate || "");
+    setEventId(eventData?.id || -1);
   },[eventData])
 
   useEffect(()=>{
@@ -30,9 +35,61 @@ function EventModal({ isOpen, onOpenChange, date}) {
     setEndDate(date.format("YYYY-MM-DD"))
   },[date])
 
+  const modifyEventArray = (eventId) =>{
+    const eventIndex = monthEvents.findIndex((event) => event.id === eventId);
+    if (eventIndex !== -1) {
+      const updatedEvents = [...monthEvents];
+       const updatedEventData = {
+        id: eventId,
+        title,
+        description,
+        startDate,
+        endDate
+       }
+      updatedEvents[eventIndex] = {
+        ...updatedEvents[eventIndex],
+        ...updatedEventData,
+      };
+
+      // Actualiza el estado para reflejar los cambios en la interfaz
+      handleMonthEvents(updatedEvents);
+    }
+  }
+
+  const handleModifyEvent = async (token,onClose) =>{
+    const response = await axios.post(
+      `${import.meta.env.VITE_REACT_APP_API_URL}/events/modify/${eventId}`,
+      {
+        title,
+        description,
+        startDate,
+        endDate,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+        // Llama a la función para actualizar el evento en memoria RAM
+
+    if(response.status === 200){
+
+      modifyEventArray(response.data.newEvent.id);
+      handleMsg(`${response.data.error}`)
+      handleErr(false);
+      handleTrigger();
+      onClose();
+    }
+  }
+
   const handleCreateEvent = async (onClose) => {
     const token = localStorage.getItem("token");
-
+    if(eventId > 0){
+      handleModifyEvent(token,onClose);
+      return
+    }
     try {
       const evento = {
         title,
@@ -50,11 +107,17 @@ function EventModal({ isOpen, onOpenChange, date}) {
           },
         }
       );
+      const id = response.data.createdEvent.id;
+      evento.id = id;
       const updatedMonthEvents = [...monthEvents, evento];
       handleMonthEvents(updatedMonthEvents);
       onClose();
       setTitle("");
       setDescription("")
+      setEventId(-1);
+      handleMsg(`${response.data.error}`)
+      handleErr(false);
+      handleTrigger();
     } catch (error) {
       console.error("Error creating event:", error);
     }
@@ -103,6 +166,7 @@ function EventModal({ isOpen, onOpenChange, date}) {
                 <Button onClick={()=>{
                   setTitle("")
                   setDescription("")
+                  setEventId(-1);
                 }} color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
@@ -110,7 +174,7 @@ function EventModal({ isOpen, onOpenChange, date}) {
                   color="primary"
                   onPress={() => handleCreateEvent(onClose)}
                 >
-                  Create
+                  { eventId < 0 ? 'Create' : 'Modify'}
                 </Button>
               </ModalFooter>
             </>

@@ -9,14 +9,16 @@ function DayEvents() {
   const [dayEvents, setDayEvents] = useState([]);
   const { selectedDate } = useApp();
   const { monthEvents, handleMonthEvents } = useApp();
+  const { handleErr, handleMsg,handleTrigger } = useApp();
 
   const handleModifyClick = (event) => {
+    console.log(event)
     handleEventData(event)
     onOpen();
-    console.log(eventData)
+
   }
   useEffect(() => {
-    console.log(eventData)
+
   }, [eventData]);
 
   const handleDeleteEvent = async (eventId) => {
@@ -35,6 +37,9 @@ function DayEvents() {
         handleMonthEvents(
           monthEvents.filter((event) => event.id !== deletedEventId)
         );
+        handleMsg(`${response.data.error}`)
+        handleErr(false);
+        handleTrigger();
       }
     } catch (error) {
       console.log(error);
