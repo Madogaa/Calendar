@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {useApp} from '../Context/AppContext'
+import { useApp } from "../Context/AppContext";
 
 import {
   Modal,
@@ -12,40 +12,41 @@ import {
 import axios from "axios";
 import dayjs from "dayjs";
 
-function EventModal({ isOpen, onOpenChange, date}) {
-  const {monthEvents, handleMonthEvents,eventData,handleEventData} = useApp()
+function EventModal({ isOpen, onOpenChange, date }) {
+  const { monthEvents, handleMonthEvents, eventData } = useApp();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [eventId, setEventId] = useState(-1);
-  const { handleErr, handleMsg,handleTrigger } = useApp();
+  const { handleErr, handleMsg, handleTrigger } = useApp();
 
-
-  useEffect(()=>{
+  useEffect(() => {
     setTitle(eventData?.title || "");
     setDescription(eventData?.description || "");
     setStartDate(eventData?.startDate || "");
     setEndDate(eventData?.endDate || "");
     setEventId(eventData?.id || -1);
-  },[eventData])
+  }, [eventData]);
 
-  useEffect(()=>{
-    setStartDate(date.format("YYYY-MM-DD"))
-    setEndDate(date.format("YYYY-MM-DD"))
-  },[date])
+  useEffect(() => {
+    setStartDate(date.format("YYYY-MM-DD"));
+    setEndDate(date.format("YYYY-MM-DD"));
+  }, [date]);
 
-  const modifyEventArray = (eventId) =>{
-    const eventIndex = monthEvents.findIndex((event) => event.id === eventId);
+  const modifyEventArray = (newEvent) => {
+    const eventIndex = monthEvents.findIndex(
+      (event) => event.id === newEvent.id
+    );
     if (eventIndex !== -1) {
       const updatedEvents = [...monthEvents];
-       const updatedEventData = {
-        id: eventId,
-        title,
-        description,
-        startDate,
-        endDate
-       }
+      const updatedEventData = {
+        id: newEvent.id,
+        title: newEvent.title,
+        description: newEvent.description,
+        startDate: dayjs(new Date(newEvent.startDate)).format("YYYY-MM-DD"),
+        endDate: dayjs(new Date(newEvent.endDate)).format("YYYY-MM-DD"),
+      };
       updatedEvents[eventIndex] = {
         ...updatedEvents[eventIndex],
         ...updatedEventData,
@@ -54,41 +55,45 @@ function EventModal({ isOpen, onOpenChange, date}) {
       // Actualiza el estado para reflejar los cambios en la interfaz
       handleMonthEvents(updatedEvents);
     }
-  }
+  };
 
-  const handleModifyEvent = async (token,onClose) =>{
-    const response = await axios.post(
-      `${import.meta.env.VITE_REACT_APP_API_URL}/events/modify/${eventId}`,
-      {
-        title,
-        description,
-        startDate,
-        endDate,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
+  const handleModifyEvent = async (token, onClose) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_REACT_APP_API_URL}/events/modify/${eventId}`,
+        {
+          title,
+          description,
+          startDate,
+          endDate,
         },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        modifyEventArray(response.data.newEvent);
+        handleMsg(`${response.data.error}`);
+        handleErr(false);
+        handleTrigger();
+        onClose();
       }
-    );
-
-        // Llama a la función para actualizar el evento en memoria RAM
-
-    if(response.status === 200){
-
-      modifyEventArray(response.data.newEvent.id);
-      handleMsg(`${response.data.error}`)
-      handleErr(false);
+    } catch (error) {
+      handleMsg(`${error.response.data.error}`);
+      handleErr(true);
       handleTrigger();
       onClose();
     }
-  }
+  };
 
   const handleCreateEvent = async (onClose) => {
     const token = localStorage.getItem("token");
-    if(eventId > 0){
-      handleModifyEvent(token,onClose);
-      return
+    if (eventId > 0) {
+      handleModifyEvent(token, onClose);
+      return;
     }
     try {
       const evento = {
@@ -96,36 +101,51 @@ function EventModal({ isOpen, onOpenChange, date}) {
         description,
         startDate: dayjs(new Date(startDate)).format("YYYY-MM-DD"),
         endDate: dayjs(new Date(endDate)).format("YYYY-MM-DD"),
-      }
+      };
 
       const response = await axios.post(
         `${import.meta.env.VITE_REACT_APP_API_URL}/events/create`,
-            evento,
+        evento,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      const id = response.data.createdEvent.id;
-      evento.id = id;
-      const updatedMonthEvents = [...monthEvents, evento];
-      handleMonthEvents(updatedMonthEvents);
-      onClose();
+
+      if (response.status === 200) {
+        const id = response.data.createdEvent.id;
+        evento.id = id;
+        const updatedMonthEvents = [...monthEvents, evento];
+        handleMonthEvents(updatedMonthEvents);
+      }
       setTitle("");
-      setDescription("")
+      setDescription("");
       setEventId(-1);
-      handleMsg(`${response.data.error}`)
+      handleMsg(`${response.data.error}`);
       handleErr(false);
       handleTrigger();
+      onClose();
     } catch (error) {
-      console.error("Error creating event:", error);
+      handleMsg(`${error.response.data.error}`);
+      handleErr(true);
+      handleTrigger();
+      onClose();
     }
   };
 
   return (
     <>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false}>
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        isDismissable={false}
+        onClose={() => {
+          setTitle("");
+          setDescription("");
+          setEventId(-1);
+        }}
+      >
         <ModalContent className="p-2">
           {(onClose) => (
             <>
@@ -163,18 +183,14 @@ function EventModal({ isOpen, onOpenChange, date}) {
                 />
               </ModalBody>
               <ModalFooter>
-                <Button onClick={()=>{
-                  setTitle("")
-                  setDescription("")
-                  setEventId(-1);
-                }} color="danger" variant="light" onPress={onClose}>
+                <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
                 <Button
                   color="primary"
                   onPress={() => handleCreateEvent(onClose)}
                 >
-                  { eventId < 0 ? 'Create' : 'Modify'}
+                  {eventId < 0 ? "Create" : "Modify"}
                 </Button>
               </ModalFooter>
             </>

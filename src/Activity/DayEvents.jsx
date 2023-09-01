@@ -12,7 +12,6 @@ function DayEvents() {
   const { handleErr, handleMsg,handleTrigger } = useApp();
 
   const handleModifyClick = (event) => {
-    console.log(event)
     handleEventData(event)
     onOpen();
 
@@ -42,7 +41,9 @@ function DayEvents() {
         handleTrigger();
       }
     } catch (error) {
-      console.log(error);
+      handleMsg(`${error.response.data.error}`)
+      handleErr(true);
+      handleTrigger();
     }
   };
 
