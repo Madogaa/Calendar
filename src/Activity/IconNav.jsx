@@ -2,8 +2,21 @@ import React from "react";
 import {HiSquares2X2} from 'react-icons/hi2'
 import {IoCalendarOutline,IoSettingsOutline} from 'react-icons/io5'
 import {IoIosArrowRoundForward} from 'react-icons/io'
+import { useApp } from "../Context/AppContext";
+import {BiLogOut} from 'react-icons/bi'
+import { useNavigate } from "react-router-dom";
 
 function IconNav() {
+  const navigate = useNavigate();
+  const [setIsLoggedIn] = React.useState(useApp().isLogged());
+  const { logout } = useApp();
+
+  const handleLogout = () => {
+    logout();
+    setIsLoggedIn(false);
+    console.log("logot")
+    navigate('/login')
+  };
 
     const icons = [
         {
@@ -18,6 +31,11 @@ function IconNav() {
             logo: IoSettingsOutline,
             link: "#",
         },
+        {
+          logo: BiLogOut,
+          link: "/login",
+          action: handleLogout,
+        }
     ]
 
   return (
@@ -31,18 +49,19 @@ function IconNav() {
         <a href="#">
           <img
             className="w-8 rounded-full"
-            src="../src/assets/MLogo.jpg"
+            src="/MLogo.jpg"
             alt="Logo"
           />
         </a>
         {icons.map((icon, index) => (
-          <a
+          <button
             className="transition ease-in-out hover:bg-blue-500 rounded-xl p-1"
             key={index}
-            href={icon.link}
+            onClick={icon.action ? icon.action : ""}
+
           >
             <icon.logo color="white" size={24} />
-          </a>
+          </button>
         ))}
       </div>
     </div>
