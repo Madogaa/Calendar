@@ -9,13 +9,14 @@ import Main from './Activity/Main';
 
 import './App.css'
 import ErrorMessage from './ErrorLog/ErrorMessage';
+import Entry from './SiteEntry/Entry';
 
 function App() {
 
   const routes = [
     {
       path: '/',
-      component: <SiteEntry />,
+      component: <SiteEntry component={<Entry />} />,
       exact: true,
     },
     {

@@ -14,3 +14,38 @@
 .backdrop-saturate-150{
     --tw-backdrop-saturate: none !important;
 }
+
+.w-20ch{
+    width: 20ch;
+}
+
+.w-35ch{
+    width: 35ch;
+}
+
+.boujee-text {
+    --bg-size: 400%;
+    --color-one: hsl(15 90% 55%);
+    font-size: clamp(3rem, 25vmin, 8rem);
+    background: linear-gradient(
+                  90deg,
+                  var(--color-one),
+                  var(--secondary-color),
+                  var(--color-one)
+                ) 0 0 / var(--bg-size) 100%;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: move-bg 8s infinite linear;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .boujee-text {
+      animation: move-bg 8s linear infinite;
+    }
+    @keyframes move-bg {
+      to {
+        background-position: var(--bg-size) 0;
+      }
+    }
+  }

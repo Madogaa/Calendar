@@ -118,3 +118,6 @@ button {
     background-color: #f9f9f9;
   }
 }
+.max-w-screen{
+  max-width: 100vw;
+}

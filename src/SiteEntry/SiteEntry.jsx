@@ -3,9 +3,9 @@ import NavBarSE from './NavBarSE'
 
 function SiteEntry({ component }) {
   return (
-    <div className=' w-screen h-screen'>
+    <div className='overflow-x-hidden w-screen h-screen '>
         <NavBarSE />
-        { component }
+        {component}
     </div>
   )
 }
